@@ -1,0 +1,198 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<style>
+			form{
+				padding:20px;
+			}
+			.footer{
+  				position: absolute;
+  				bottom: 0%;
+  				width: 100%;
+  				height: 50px;
+  				background-color: black;
+  				text-align: center;
+  				color: white;
+			}
+			.train2{
+				height:200px;
+				
+			}
+		</style>
+		<script>
+			window.onload = function showdate(){
+				//var date = new Date();
+				//document.getElementById('inputCity').value = new Date();
+				var date = new Date();
+
+				var day = date.getDate();
+				var month = date.getMonth() + 1;
+				var year = date.getFullYear();
+
+				if (month < 10) month = "0" + month;
+				if (day < 10) day = "0" + day;
+
+				var today = year + "-" + month + "-" + day;       
+				document.getElementById("inputCity").value = today;
+			}
+			
+			function Payment(){
+				var from = document.getElementById('exampleFormControlSelect1').value;
+				var to = document.getElementById('exampleFormControlSelect2').value;
+				var type = document.getElementById('inputState').value;
+				
+				if(from == "Virar" && (to == "Vasai" || to == 'Bhayander')&&(type == 'Single')){
+					document.getElementById('inputZip').value = 10;
+				}else if((from == "Virar" && (to == "Vasai" || to == 'Bhayander')&&(type == 'Return'))){
+					document.getElementById('inputZip').value = 20;
+				}else if((from == "Virar" || from == "Vasai") && (to == "Borivali" || to == 'Andheri')&&(type == 'Single')){
+					document.getElementById('inputZip').value = 20;
+				}else if((from == "Virar" || from == "Vasai") && (to == "Borivali" || to == 'Andheri')&&(type == 'Return')){
+					document.getElementById('inputZip').value = 40;
+				}else if(from == to){
+					alert("Departure and Destination cannnot be same")
+				}
+				
+				if(from == "Vasai" && (to == "Virar" || to == 'Bhayander')&&(type == 'Single')){
+					document.getElementById('inputZip').value = 10;
+				}else if((from == "Vasai" && (to == "Virar" || to == 'Bhayander')&&(type == 'Return'))){
+					document.getElementById('inputZip').value = 20;
+				}
+				
+				if(from == "Bhayander" && (to == "Virar" || to == 'Vasai')&&(type == 'Single')){
+					document.getElementById('inputZip').value = 20;
+				}else if((from == "Bhayander" && (to == "Virar" || to == 'Vasai')&&(type == 'Return'))){
+					document.getElementById('inputZip').value = 40;
+				}
+				
+				if((from == "Borivali" || from == "Andheri") && (to == "Virar" || to == 'Vasai')&&(type == 'Single')){
+					document.getElementById('inputZip').value = 20;
+				}else if((from == "Borivali" || from == "Andheri") && (to == "Virar" || to == 'Vasai')&&(type == 'Return')){
+					document.getElementById('inputZip').value = 40;
+				}else if((from == "Borivali") && (to == "Bhayander" || to == "Andheri")&&(type == 'Single')){
+					document.getElementById('inputZip').value = 10;
+				}else if((from == "Borivali") && (to == "Bhayander" || to == "Andheri")&&(type == 'Return')){
+					document.getElementById('inputZip').value = 20;
+				}
+				
+				if((from == "Andheri") && (to == "Borivali")&&(type == 'Single')){
+					document.getElementById('inputZip').value = 5;
+				}else if((from == "Andheri") && (to == "Borivali")&&(type == 'Return')){
+					document.getElementById('inputZip').value = 10;
+				}
+				
+			}
+			
+			
+			function nameValidation(){
+				var name = document.getElementById('inputEmail4').value;
+				
+				if(name == "" || name == null){
+					alert("Name is Blank");
+				}else if(!name.match('^[a-zA-Z]+$')){
+					alert("First Name is Invalid!")
+				}else if(name.length <=2 || name.length > 10){
+					alert("Name character length is 3 to 10")
+				}
+			}
+			
+			function lastnameValidation(){
+				var lastname = document.getElementById('inputPassword4').value;
+				
+				if(lastname == "" || lastname == null){
+					alert("Last Name is Blank");
+				}else if(!lastname.match('^[a-zA-Z]+$')){
+					alert("Last Name is Invalid!")
+				}else if(lastname.length <=2 || lastname.length > 10){
+					alert("Last Name character length is 3 to 10")
+				}
+			}
+			
+			window.onsubmit= function validation(){
+				console.log("submitted")
+				var name = document.getElementById('inputEmail4').value;
+				var lastname = document.getElementById('inputPassword4').value;
+				
+				if(name == "" || lastname == ""){
+					alert("SOME FIELDS ARE EMPTY DATA WON'T BE SAVED")
+				}
+				
+			}
+			
+		</script>
+	</head>
+	<body>
+		<div th:include="navbar.html"></div>
+		
+		
+		<form th:object="${addticket}" method="POST" th:action="@{/ticket/savebooking}">
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">First Name</label>
+      <input th:field="*{firstName}" type="text" class="form-control" id="inputEmail4" placeholder="First Name" onchange="nameValidation()">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputPassword4">Last Name</label>
+      <input th:field="*{lastName}" type="text" class="form-control" id="inputPassword4" placeholder="Last Name" onchange="lastnameValidation()">
+    </div>
+  </div>
+  <!-- <div class="form-group">
+    <label for="inputAddress">Address</label>
+    <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+  </div> -->
+  <div class="form-group">
+    <label for="exampleFormControlSelect1">Depart From</label>
+    <select th:field="*{departFrom}" class="form-control" id="exampleFormControlSelect1" onchange="Payment()">
+      <option value="Virar">Virar</option>
+      <option value="Vasai">Vasai</option>
+      <option value="Bhayander">Bhayander</option>
+      <option value="Borivali">Borivali</option>
+      <option value="Andheri">Andheri</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlSelect2">Going To</label>
+    <select th:field="*{goingTo}" class="form-control" id="exampleFormControlSelect2" onchange="Payment()">
+      <option value="Virar" selected>Virar</option>
+      <option value="Vasai">Vasai</option>
+      <option value="Bhayander">Bhayander</option>
+      <option value="Borivali">Borivali</option>
+      <option value="Andheri">Andheri</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputCity">Date</label>
+      <input th:field="*{date}" type="date" class="form-control" id="inputCity" readonly>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="inputState">Type</label>
+      <select th:field="*{type}" id="inputState" class="form-control" onchange="Payment()">
+        <option value="Single" selected>Single</option>
+        <option value="Return">Return</option>
+      </select>
+    </div>
+    <div class="form-group col-md-2">
+      <label for="inputZip">Payment</label>
+      <input th:field="*{payment}" type="number" class="form-control" id="inputZip" readonly>
+    </div>
+  </div>
+  <!-- <div class="form-group">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="gridCheck">
+      <label class="form-check-label" for="gridCheck">
+        Check me out
+      </label>
+    </div>
+  </div> -->
+  <button type="submit" class="btn btn-primary" >Submit</button>
+</form>
+	
+		<img th:src="@{/images/trainlogo2.png}" alt="train" class="train2"/>
+		<div th:include="footer.html" class="footer"></div>
+		
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>	
+	</body>
+</html>
