@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -30,6 +31,10 @@ public class Users implements UserDetails {
 	@NotBlank
 	private String passcode;
 	
+	@Column
+	@Email
+	private String email;
+
 	@Column
 	@NotBlank
 	private String role = "ROLE_ADMIN";
@@ -63,6 +68,24 @@ public class Users implements UserDetails {
 	}
 
 	public void setRole(String role) {
+		this.role = role;
+	}
+	
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Users(int id, @NotBlank String name, @NotBlank String passcode, @Email String email, @NotBlank String role) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.passcode = passcode;
+		this.email = email;
 		this.role = role;
 	}
 
